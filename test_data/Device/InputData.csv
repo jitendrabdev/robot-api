@@ -1,0 +1,11 @@
+ValidColors,InvalidColors,ValidName,InvalidNames,BrightnessPositveValues,BrightnessInvalidValues
+#ffffff,Black,Blub,1@test,10,-10
+#FF5733,Blue,Bulb_1,$ab,1,0
+#F6FF33,White,Bulb1,#ites,2,Abc
+#8A9014,Red,Bulb-1,%test,3,10.2
+#14906C,yellow,Bulb.1,^test,4,13.2
+#07AF7F,Green,1Bulb,&test,5,-1
+#FC091C,Grey,Test-123,*Bulb,6,#
+#FFC300,Aqua,Blue_bulb,^bulb,7,(test)
+#900C3F,Maroon,White-Bulb,?Bulb,8,~10
+#DAF7A6,Orange,Yellow_tube,123,9,0.01

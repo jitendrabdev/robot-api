@@ -16,23 +16,24 @@ ${DEVICE_COLOR_ENDPOINT}    ${BASE_URL}/color
 ${DEVICE_DISCONNECT_ENDPOINT}    ${BASE_URL}/disconnect
 ${DEVICE_NAME_ENDPOINT}    ${BASE_URL}/name
 ${DATA_FILE}      ${TEST_DATA_LOCATION}\\Device\\InputData.csv
+${RESPONSE_SUCCESS_CODE}    ${200}
+${RESPONSE_FAIL_CODE}    ${500}
+${DEVICE_IP1}     192.168.100.10
+${DEVICE_IP2}     192.168.100.11
+${NEW_COLOR}      #336699
+${NEW_BRIGHTNESS}    4
+${NEW_NAME}       NewName
 
 *** Keywords ***
 Connect Device
     [Arguments]    ${device_ip}    ${success_code}
     ${content}    ${response_code}    ${header}    Execute Post Request    ${DEVICE_CONNECT_ENDPOINT}    {"ip":"${device_ip}"}
-    log    ${content}
-    Should Be Equal    '${response_code}'    '200'
-    ${content}    Load Json    ${content}
-    ${content}    Convert To Dictionary    ${content}
-    ${success_response}    Get Value By Key From Json    ${content}    success
-    ${success_response}    Convert To Boolean    ${success_response}
-    Should Be Equal    ${success_response}    ${success_code}
+    API Response Validation    ${content}    ${response_code}    ${RESPONSE_SUCCESS_CODE}    ${success_code}
 
 Get Device State
+    [Arguments]    ${success_code}
     ${content}    ${response_code}    ${header}    Execute Get Request    ${DEVICE_STATE_ENDPOINT}
-    Should Be Equal    '${response_code}'    '200'
-    Log    ${content}
+    API Response Validation    ${content}    ${response_code}    ${RESPONSE_SUCCESS_CODE}    ${success_code}
     [Return]    ${content}
 
 Disconnect Device
@@ -52,7 +53,7 @@ Set Name and Validate
         ${modified_name}    Set Variable    ${list}[${i}]
         ${content}    ${response_code}    ${header}    Execute Post Request    ${DEVICE_NAME_ENDPOINT}    {"name":"${modified_name}"}
         Should Be Equal    '${response_code}'    '200'
-        ${device_state}    Get Device State
+        ${device_state}    Get Device State    ${True}
         ${device_state}    Load Json    ${device_state}
         ${device_state}    Convert To Dictionary    ${device_state}
         ${device_name}    Get Value By Key From Json    ${device_state}    name
@@ -72,7 +73,7 @@ Set Color
         ${modified_color}    Set Variable    ${list}[${i}]
         ${content}    ${response_code}    ${header}    Execute Post Request    ${DEVICE_COLOR_ENDPOINT}    {"color":"${modified_color}"}
         Should Be Equal    '${response_code}'    '${status_code}'
-        ${device_state}    Get Device State
+        ${device_state}    Get Device State    ${True}
         ${device_state}    Load Json    ${device_state}
         ${device_state}    Convert To Dictionary    ${device_state}
         ${device_color}    Get Value By Key From Json    ${device_state}    color
@@ -92,7 +93,7 @@ Set Brightness
         ${modified_brightness}    Set Variable    ${list}[${i}]
         ${content}    ${response_code}    ${header}    Execute Post Request    ${DEVICE_BRIGHTNESS_ENDPOINT}    {"brightness":"${modified_brightness}"}
         Should Be Equal    '${response_code}'    '200'
-        ${device_state}    Get Device State
+        ${device_state}    Get Device State    ${True}
         ${device_state}    Load Json    ${device_state}
         ${device_state}    Convert To Dictionary    ${device_state}
         ${device_brightness}    Get Value By Key From Json    ${device_state}    brightness
@@ -114,3 +115,13 @@ Get List of IPs of All Devices
         Append To List    ${device_ips}    ${device_ip}
     END
     [Return]    ${device_ips}
+
+API Response Validation
+    [Arguments]    ${api_response}    ${response_code_actual}    ${response_code_expected}    ${success_code}
+    Should Be Equal    ${response_code_actual}    ${response_code_expected}
+    Log    ${api_response}
+    ${content}    Load Json    ${api_response}
+    ${content}    Convert To Dictionary    ${content}
+    ${success_response}    Get Value By Key From Json    ${content}    success
+    ${success_response}    Convert To Boolean    ${success_response}
+    Should Be Equal    ${success_response}    ${success_code}

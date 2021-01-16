@@ -1,5 +1,5 @@
 # API Automation using robot framework.
-#Steps to configure application are as follows:
+#Steps to configure robot framework for testing an application are as follows:
 1.  Install python 3.8
 2.	Run command "pip install robotframework"
 3.	Download ride from github	https://github.com/robotframework/RIDE

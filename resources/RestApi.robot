@@ -3,6 +3,7 @@ Resource          ../test_data/TestData.robot
 Library           Collections
 Library           ExcelLibrary
 Library           ../lib/rest_util/RestGeneric.py
+Library           OperatingSystem
 
 *** Variables ***
 ${DEVICE_ENDPOINT}    ${BASE_URL}/devices
@@ -20,9 +21,11 @@ ${RESPONSE_SUCCESS_CODE}    ${200}
 ${RESPONSE_FAIL_CODE}    ${500}
 ${DEVICE_IP1}     192.168.100.10
 ${DEVICE_IP2}     192.168.100.11
-${NEW_COLOR}      #336699
-${NEW_BRIGHTNESS}    4
+${NEW_COLOR}      \#336699
+${NEW_BRIGHTNESS}    ${4}
 ${NEW_NAME}       NewName
+${NSSM_PATH}      "C:\\jitendra\\robot-api\\conf\\nssm-2.24\\win64\\nssm.exe"
+${SERVER_SERVICE_NAME}    Smarthomeservice
 
 *** Keywords ***
 Connect Device
@@ -125,3 +128,9 @@ API Response Validation
     ${success_response}    Get Value By Key From Json    ${content}    success
     ${success_response}    Convert To Boolean    ${success_response}
     Should Be Equal    ${success_response}    ${success_code}
+
+Server_Service_Start_Stop
+    [Arguments]    ${start_stop_command}
+    ${status}    Run    ${NSSM_PATH} ${start_stop_command} ${SERVER_SERVICE_NAME}
+    log    ${status}
+    Comment    Should Contain    ${status}    successfully

@@ -10,7 +10,7 @@
 8.	Run command "pip install robotframework-excellib"
 9.  Run command "pip install robotframework-csvlib"
 10. Configure the Server service e.g. Smarthomeservice to start and stop using automation.
-11. Run ride using adminitration access.
+11. Run ride using Administrator access.
 
 
   

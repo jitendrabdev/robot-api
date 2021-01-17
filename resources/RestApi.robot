@@ -24,7 +24,6 @@ ${DEVICE_IP2}     192.168.100.11
 ${NEW_COLOR}      \#336699
 ${NEW_BRIGHTNESS}    ${4}
 ${NEW_NAME}       NewName
-${NSSM_PATH}      "C:\\jitendra\\robot-api\\conf\\nssm-2.24\\win64\\nssm.exe"
 ${SERVER_SERVICE_NAME}    Smarthomeservice
 
 *** Keywords ***
@@ -131,6 +130,6 @@ API Response Validation
 
 Server_Service_Start_Stop
     [Arguments]    ${start_stop_command}
-    ${status}    Run    ${NSSM_PATH} ${start_stop_command} ${SERVER_SERVICE_NAME}
+    ${status}    Run    sc ${start_stop_command} ${SERVER_SERVICE_NAME}
     log    ${status}
     Comment    Should Contain    ${status}    successfully

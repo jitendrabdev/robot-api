@@ -169,6 +169,7 @@ Device all parameters like name, brightness and color should be reset after serv
     ${device_name}    Get Value By Key From Json    ${device_state}    name
     Should Be Equal    ${device_name}    ${NEW_NAME}
     Server_Service_Start_Stop    Stop
+    sleep    2s
     Server_Service_Start_Stop    Start
     Connect Device    ${DEVICE_IP1}    ${True}
     ${device_state}    Get Device State    ${True}
